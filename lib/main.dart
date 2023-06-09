@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Discord',
       trailing: MaterialButton(
         child: Text(
-            'Fox_score#1678',
+            'fox_score',
             style: Theme.of(context).textTheme.bodyLarge,
         ),
         // Copy on click
