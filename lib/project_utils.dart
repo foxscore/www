@@ -4,6 +4,7 @@ import 'package:www/js_utils.dart';
 Widget projectBase({
     required String title,
     required List<Widget> children,
+    List<String> chips = const [],
   }) {
   return Padding(
     padding: const EdgeInsets.all(16.0),
@@ -20,6 +21,14 @@ Widget projectBase({
             ),
           ),
           ...children,
+          if (chips.isNotEmpty) ...[
+            const SizedBox(height: 16.0),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: chips.map((chip) => Chip(label: Text(chip))).toList(),
+            ),
+          ],
         ],
       ),
     ),
@@ -65,7 +74,7 @@ List<Widget> linkButton(BuildContext context, String text, String url) {
 class LinkItem {
   final IconData icon;
   final String tooltip;
-  final String url;
+  final String? url;
 
   const LinkItem({
     required this.icon,
@@ -84,7 +93,7 @@ List<Widget> linkList(BuildContext context, List<LinkItem> items) {
         message: item.tooltip,
         child: IconButton(
           icon: Icon(item.icon),
-          onPressed: () => openLink(context, item.url),
+          onPressed: item.url == null ? null : () => openLink(context, item.url!),
         ),
       )).toList(),
     ),

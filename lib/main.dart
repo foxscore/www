@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:www/js_utils.dart';
 import 'package:www/project_utils.dart';
 import 'package:www/projects/fvpr.dart';
+import 'package:www/projects/occ.dart';
 
 import 'ccard.dart';
 
@@ -183,7 +184,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: 'Projects',
         children: [
           const SizedBox(height: 8.0),
-          _projectButton('FVPR', fvprBottomSheet)
+          _projectButton('FVPR', fvprBottomSheet),
+          const SizedBox(height: 8.0),
+          _projectButton('OpenCC', occBottomSheet),
         ]
     );
   }
