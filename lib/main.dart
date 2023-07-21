@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:www/js_utils.dart';
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
             return const MyHomePage();
           } else {
             windowWidth = constraints.maxHeight * 0.95 * 9 / 16;
+            if (windowWidth < 400) windowWidth = 400;
             return Scaffold(
               backgroundColor: Theme.of(context).colorScheme.primary,
               body: Center(
@@ -102,12 +105,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return CCard(
       title: 'Discord',
       trailing: MaterialButton(
-        child: Text(
-            'Fox_score#1678',
-            style: Theme.of(context).textTheme.bodyLarge,
+        child: Row(
+          children: [
+            const Icon(Icons.alternate_email),
+            const SizedBox(width: 4),
+            Text(
+                'fox_score',
+                style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ],
         ),
         // Copy on click
-        onPressed: () {
+        onPressed: () async {
           // if (html.window.navigator.clipboard != null) {
           //   html.window.navigator.clipboard!.writeText('Fox_score#1678');
           //   ScaffoldMessenger.of(context).showSnackBar(
@@ -118,10 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
           // }
 
           try {
-            copyToClipboard('Fox_score#1678');
+            await copyToClipboard('fox_score');
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Copied to clipboard'),
+              SnackBar(
+                behavior: SnackBarBehavior.floating,
+                width: windowWidth,
+                content: const Text('Copied to clipboard'),
               ),
             );
           } catch(e) {

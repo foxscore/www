@@ -1,6 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 void openLink(BuildContext context, String url, {
@@ -24,6 +25,7 @@ void openLink(BuildContext context, String url, {
   // }
 }
 
-void copyToClipboard(String text) {
-  js.context.callMethod('copyToClipboard', [text]);
+Future<void> copyToClipboard(String text) async {
+  // js.context.callMethod('copyToClipboard', [text]);
+  await Clipboard.setData(ClipboardData(text: text));
 }
