@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:www/js_utils.dart';
@@ -30,25 +28,24 @@ class MyApp extends StatelessWidget {
       home: LayoutBuilder(
         builder: (context, constraints) {
           final aspectRatio = constraints.maxWidth / constraints.maxHeight;
-          if (aspectRatio < 0.65  ) {
+          if (aspectRatio < 0.65) {
             windowWidth = constraints.maxWidth;
             return const MyHomePage();
           } else {
             windowWidth = constraints.maxHeight * 0.95 * 9 / 16;
             if (windowWidth < 400) windowWidth = 400;
             return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              body: Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16.0),
-                  child: SizedBox(
-                    height: constraints.maxHeight * 0.95,
-                    width: windowWidth,
-                    child: const MyHomePage(),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                body: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.0),
+                    child: SizedBox(
+                      height: constraints.maxHeight * 0.95,
+                      width: windowWidth,
+                      child: const MyHomePage(),
+                    ),
                   ),
-                ),
-              )
-            );
+                ));
           }
         },
       ),
@@ -92,13 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Center(
-          child: Text(
-            'Fox_score',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-        )
-      ),
+          child: Center(
+        child: Text(
+          'Fox_score',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+      )),
     );
   }
 
@@ -111,8 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const Icon(Icons.alternate_email),
             const SizedBox(width: 4),
             Text(
-                'fox_score',
-                style: Theme.of(context).textTheme.bodyLarge,
+              'fox_score',
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ],
         ),
@@ -136,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 content: const Text('Copied to clipboard'),
               ),
             );
-          } catch(e) {
+          } catch (e) {
             if (kDebugMode) {
               print(e);
             }
@@ -168,27 +164,23 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: () => {
         // Show bottom sheet
         showModalBottomSheet(
-          context: context,
-          builder: (context) => SizedBox(
-            width: windowWidth,
-            child: builder(context),
-          )
-        )
+            context: context,
+            builder: (context) => SizedBox(
+                  width: windowWidth,
+                  child: builder(context),
+                ))
       },
       child: Text(text),
     );
   }
 
   Widget _projects() {
-    return CCard(
-        title: 'Projects',
-        children: [
-          const SizedBox(height: 8.0),
-          _projectButton('FVPR', fvprBottomSheet),
-          const SizedBox(height: 8.0),
-          _projectButton('OpenCC', occBottomSheet),
-        ]
-    );
+    return CCard(title: 'Projects', children: [
+      const SizedBox(height: 8.0),
+      _projectButton('FVPR', fvprBottomSheet),
+      const SizedBox(height: 8.0),
+      _projectButton('OpenCC', occBottomSheet),
+    ]);
   }
 
   List<Widget> _linkButton(String text, String url) {
@@ -205,13 +197,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _linksCard() {
-    return CCard(
-        title: "Links",
-        children: [
-          ..._linkButton('GitHub', 'https://github.com/foxscore'),
-          ..._linkButton('PayPal', 'https://paypal.me/felixjkaiser'),
-        ]
-    );
+    return CCard(title: "Links", children: [
+      ..._linkButton('GitHub', 'https://github.com/foxscore'),
+      ..._linkButton('PayPal', 'https://paypal.me/felixjkaiser'),
+    ]);
   }
 
   Widget _underConstructionCard() {
@@ -231,26 +220,23 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextButton(
-          onPressed: () => showModalBottomSheet(
-            context: context,
-            builder: (context) => SizedBox(
-              width: windowWidth,
-              child: projectBase(
-                title: 'Felix Kaiser',
-                children: [
-                  ...row(
-                    [
-                      ...textButton('+43 660 50 80 541', () => openLink(context, 'tel:+436605080541')),
-                      ...textButton('office@foxscore.dev', () => openLink(context, 'mailto:office@foxscore.dev')),
-                    ]
-                  ),
-                  ...paragraph('Zacharias Werner-Gasse 27, 2344 Maria Enzersdorf (AT)'),
-                ]
-              )
-            )
-          ),
-          child: const Text('Imprint')
-        ),
+            onPressed: () => showModalBottomSheet(
+                context: context,
+                builder: (context) => SizedBox(
+                    width: windowWidth,
+                    child: projectBase(title: 'Felix Kaiser', children: [
+                      ...row([
+                        ...textButton('+43 660 50 80 541',
+                            () => openLink(context, 'tel:+436605080541')),
+                        ...textButton(
+                            'office@foxscore.dev',
+                            () => openLink(
+                                context, 'mailto:office@foxscore.dev')),
+                      ]),
+                      ...paragraph(
+                          'Zacharias Werner-Gasse 27, 2344 Maria Enzersdorf (AT)'),
+                    ]))),
+            child: const Text('Imprint')),
       ],
     );
   }
