@@ -1,0 +1,7 @@
+{
+  "watch": ["ts/*.ts", "tsconfig.json", "wwwroot/*", "build.js"],
+  "exec": "npm run build && static-server -p 8080 dist",
+  "ext": "*",
+  "delay": 200,
+  "restartOnFailure": true
+}

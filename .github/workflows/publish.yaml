@@ -1,19 +1,35 @@
-name: Publish to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # TODO Install node
+      # TODO Install packages
+      # TODO Build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          channel: beta
-      - run: flutter pub get
-      - uses: bluefireteam/flutter-gh-pages@v7
-        with:
-          baseHref: /
+          path: 'dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

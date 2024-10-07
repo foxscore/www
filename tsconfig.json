@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "outDir": "dist/js",
+    "rootDir": "ts",
+    "sourceMap": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+    }
+  }
+}
