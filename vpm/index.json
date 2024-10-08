@@ -1,0 +1,26 @@
+{
+  "name": "Vulpine Vault",
+  "id": "dev.foxscore",
+  "url": "https://foxscore.dev/vpm/index.json",
+  "author": "felixkaiser2000@protonmail.com",
+  "packages": {
+    "dev.foxscore.easy-login": {
+      "1.0.0-beta.1": {
+        "name": "dev.foxscore.easy-login",
+        "displayName": "EasyLogin (Beta)",
+        "version": "1.0.0-beta.1",
+        "description": "Allows you to be logged in across multiple projects with multiple accounts.",
+        "author": {
+          "name": "Fox_score",
+          "url": "https://foxscore.dev",
+          "email": "felixkaiser2000@protonmail.com"
+        },
+        "vpmDependencies": {
+          "com.vrchat.base": "^3.5.1"
+        },
+        "url": "https://example.com",
+        "unitypackage": "This is a fake field to test functionality"
+      }
+    }
+  }
+}

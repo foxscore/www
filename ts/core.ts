@@ -13,6 +13,30 @@ function onInitialize(target: any, propertyKey: string, descriptor: PropertyDesc
         // ToDo: Try to run the function. Show an error notification on fail.
     }
 }
+function localhost(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = function (...args: any[]) {
+        if (window.location.hostname !== 'localhost') {
+            return undefined;
+        }
+        return originalMethod.apply(this, args);
+    };
+
+    return descriptor;
+}
+function production(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = function (...args: any[]) {
+        if (window.location.hostname === 'foxscore.dev') {
+            return undefined;
+        }
+        return originalMethod.apply(this, args);
+    };
+
+    return descriptor;
+}
 //endregion
 
 enum Variant {
@@ -97,6 +121,26 @@ class Core extends Static {
             Core.navElement.removeAttribute("expanded");
         } else {
             Core.navElement.setAttribute("expanded", null);
+        }
+    }
+
+    public static CopyToClipboard(value: string) {
+        try {
+            navigator.clipboard.writeText(value).then(r => Notifications.Show(
+                'Copied to clipboard',
+                {
+                    variant: Variant.Success,
+                    duration: 3500,
+                } as NotificationsOptions
+            ));
+        } catch (err) {
+            console.error(err);
+            Notifications.Show(
+                'Failed to copy to clipboard',
+                {
+                    variant: Variant.Danger,
+                } as NotificationsOptions
+            )
         }
     }
 }

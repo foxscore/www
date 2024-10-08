@@ -1,0 +1,87 @@
+{{#> layout}}
+
+    <h2 class="mb-0">Vulpine Vault</h2>
+
+    <row>
+        <a href="vcc://vpm/addRepo?url={{encodeURIComponent 'https://foxscore.dev/vpm/index.json' }}">
+        <button primary type="button">
+            Add to VCC
+        </button>
+        </a>
+        <button neutral onclick="Core.CopyToClipboard('https://foxscore.dev/vpm/index.json')"
+                tooltip="Copy the index.json url to your clipboard" tooltip-placement="right">
+            <i class="nf nf-md-content_copy"></i>
+            &nbsp;
+            Copy
+        </button>
+    </row>
+
+    <row class="m-0 p-0 mt-4">
+    {{#each packages}}
+        <card medium id="{{name}}">
+            <header>
+                {{displayName}}
+            </header>
+            <content>
+                <code>{{description}}</code>
+
+                <br/>
+                <br/>
+
+                <h3 class="mb-0">Metadata</h3>
+                <table class="ps-2">
+                    <tr>
+                        <td>Id</td>
+                        <td>{{name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Current Version</td>
+                        <td>{{version}}</td>
+                    </tr>
+                </table>
+
+                {{#if dependencies}}
+                    <br/>
+                    <h3 class="mb-0">Dependencies</h3>
+                    <table class="ps-2">
+                        {{#each dependencies}}
+                            <tr>
+                                <td>{{name}}</td>
+                                <td>{{range}}</td>
+                            </tr>
+                        {{/each}}
+                    </table>
+                {{/if}}
+
+                {{#if vpmDependencies}}
+                    <br/>
+                    <h3 class="mb-0">VPM Dependencies</h3>
+                    <table class="ps-2">
+                    {{#each vpmDependencies}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{range}}</td>
+                        </tr>
+                    {{/each}}
+                    </table>
+                {{/if}}
+            </content>
+            <footer>
+                <a href="{{url}}"><button neutral>
+                    <i class="nf nf-md-download"></i>
+                    &nbsp;
+                    ZIP
+                </button></a>
+                {{#if unitypackage}}
+                    <a href="{{unitypackage}}"><button neutral>
+                        <i class="nf nf-md-download"></i>
+                        &nbsp;
+                        Unity Package
+                    </button></a>
+                {{/if}}
+            </footer>
+        </card>
+    {{/each}}
+    </row>
+
+{{/layout}}

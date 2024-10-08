@@ -357,14 +357,15 @@ body nav button[selected]:active {
             position: fixed;
             top: 0;
         }
+
         end {
             position: fixed;
             bottom: 0;
         }
     }
 
-    body nav:not([hidden]) {
-        border-right: 2px solid var(--border-color);
+    body:has(nav:not([hidden])) main {
+        border-left: 2px solid var(--border-color);
     }
 
     body nav[expanded] {
@@ -424,6 +425,7 @@ body main {
     gap: 0.5rem;
     width: calc(100% - (var(--main-padding) * 2));
     padding: var(--main-padding);
+    overflow-y: scroll;
 }
 
 body main row {
@@ -1302,7 +1304,7 @@ code {
     position: relative;
     padding: 0.25rem 0.4rem;
     top: -0.125rem;
-    border-radius: var(--component-border-radius);
+    border-radius: var(--component-border-radius) 0 var(--component-border-radius) 0;
 }
 
 /* endregion */
@@ -1440,6 +1442,22 @@ alert[min] {
 
 alert[max] {
     width: auto;
+}
+
+/* endregion */
+
+/* region Table */
+
+table {
+    border-collapse: separate;
+    border-spacing: 10px; /* Adjust padding between columns and rows */
+}
+
+td:nth-child(1) {
+    font-weight: bold;
+}
+td:nth-child(2) {
+    color: var(--text-neutral);
 }
 
 /* endregion */
