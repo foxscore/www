@@ -22,35 +22,7 @@ async function build() {
     if (existsSync('dist')) {
         await rm('dist', { recursive: true, force: true });
     }
-    const vpmIndex = JSON.parse(await readFile('vpm/index.json', { encoding: 'utf-8' }));
-    const packages = [];
-    for (const pkgName in vpmIndex.packages) {
-        let versions = vpmIndex.packages[pkgName];
-        let pkg = versions[Object.keys(versions)[0]];
-
-        if (pkg.hasOwnProperty('dependencies')) {
-            let dependencies = [];
-            for (const pkgName in pkg.dependencies) {
-                dependencies.push({
-                    name: pkgName,
-                    range: pkg.dependencies[pkgName],
-                })
-            }
-            pkg.vpmDependencies = vpmDependencies;
-        }
-        if (pkg.hasOwnProperty('vpmDependencies')) {
-            let vpmDependencies = [];
-            for (const pkgName in pkg.vpmDependencies) {
-                vpmDependencies.push({
-                    name: pkgName,
-                    range: pkg.vpmDependencies[pkgName],
-                })
-            }
-            pkg.vpmDependencies = vpmDependencies;
-        }
-
-        packages.push(pkg);
-    }
+    const packagesOverview = JSON.parse(await readFile('vpm/meta.packages-overview.json', { encoding: 'utf-8' }));
 
     info("Copying assets...")
     function syncFiles(from, to, patterns, patternMustNotMatch) {
@@ -96,9 +68,14 @@ async function build() {
         'layout',
         await readFile('layout.hbs', { encoding: 'utf-8' }),
     )
+    // noinspection HtmlUnknownTarget,HtmlUnknownAttribute
+    Handlebars.registerPartial('linkButton', '<a href="{{href}}"><button {{style}}>{{> @partial-block }}</button></a>')
     Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
         // noinspection EqualityComparisonWithCoercionJS
         return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+    });
+    Handlebars.registerHelper('ifEmpty', function(arg1, options) {
+        return arg1.length === 0 ? options.fn(this) : options.inverse(this);
     });
     Handlebars.registerHelper('encodeURIComponent', function(value) {
         return encodeURIComponent(value);
@@ -116,7 +93,7 @@ async function build() {
                     pageRelative === 'projects/index' ? 'projects' :
                         pageRelative === 'vpm/index' ? 'vpm' :
                             'unknown',
-            packages: packages
+            packages: packagesOverview
         };
         const htmlContent = compiler(resources);
 

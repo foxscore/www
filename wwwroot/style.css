@@ -255,6 +255,10 @@ body nav {
     a {
         text-decoration: none !important;
     }
+
+    button span {
+        font-family: "Ubuntu Nerd", serif;
+    }
 }
 
 body nav button {

@@ -1,0 +1,70 @@
+{{#> layout}}
+
+    <h1 class="mb-0">Projects</h1>
+    <div class="mb-2">
+            <span text-neutral relative style="top: -0.5rem;">
+                Stuff I made
+            </span>
+    </div>
+
+    <row>
+
+        <card large>
+            <header>
+                Easy Login
+            </header>
+            <content>
+                <p>
+                    The VRChat SDK handles authentication in a weird way.
+                    The biggest issue being that you have to login for every project individually,
+                    which may log you out of older projects or even the game itself.
+                </p>
+                <p>
+                    Easy Login not only solves this issue by having you login once
+                    and keeping your credentials securely across your local projects.
+                    It also allows you to login with multiple accounts
+                    without having to re-enter your password when switching between them.
+                </p>
+            </content>
+            <footer>
+                {{#> linkButton href="/vpm/#dev.foxscore.easy-login" style="primary"}}
+                    Get Started
+                {{/linkButton}}
+                {{#> linkButton href="https://github.com/foxscore/easy-login" style="neutral"}}
+                    Source Code
+                {{/linkButton}}
+            </footer>
+        </card>
+
+        <card medium>
+            <header>foxscore.dev</header>
+            <content>
+                <p>
+                    I thought about making my own css library a while back, and recently decided to use early scraps of it to make this website.
+                </p>
+
+                <table>
+                    <tr>
+                        <td>Ubuntu NerdFont</td>
+                        <td>UBUNTU FONT LICENCE Version 1.0</td>
+                    </tr>
+                    <tr>
+                        <td>PopperJS</td>
+                        <td>MIT License</td>
+                    </tr>
+                    <tr>
+                        <td>Tippy.JS</td>
+                        <td>MIT License</td>
+                    </tr>
+                </table>
+            </content>
+            <footer>
+                {{#> linkButton href="https://github.com/foxscore/www" style="neutral"}}
+                    Source Code
+                {{/linkButton}}
+            </footer>
+        </card>
+
+    </row>
+
+{{/layout}}

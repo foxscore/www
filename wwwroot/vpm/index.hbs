@@ -1,8 +1,13 @@
 {{#> layout}}
 
-    <h2 class="mb-0">Vulpine Vault</h2>
+    <h1 class="mb-0">Vulpine Vault</h1>
+    <div class="mb-2">
+            <span text-neutral relative style="top: -0.5rem;">
+                Fox_score's VPM Repository
+            </span>
+    </div>
 
-    <row>
+    <row class="mb-4">
         <a href="vcc://vpm/addRepo?url={{encodeURIComponent 'https://foxscore.dev/vpm/index.json' }}">
         <button primary type="button">
             Add to VCC
@@ -16,7 +21,20 @@
         </button>
     </row>
 
-    <row class="m-0 p-0 mt-4">
+    {{#ifEmpty packages}}
+        <card danger>
+            <header>
+                No packages available
+            </header>
+            <content>
+                This is likely an error.
+                <br/>
+                Please check again later.
+            </content>
+        </card>
+    {{/ifEmpty}}
+
+    <row>
     {{#each packages}}
         <card medium id="{{name}}">
             <header>
@@ -26,19 +44,12 @@
                 <code>{{description}}</code>
 
                 <br/>
-                <br/>
 
-                <h3 class="mb-0">Metadata</h3>
-                <table class="ps-2">
-                    <tr>
-                        <td>Id</td>
-                        <td>{{name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Current Version</td>
-                        <td>{{version}}</td>
-                    </tr>
-                </table>
+                <p text-neutral class="mb-0">
+                    {{name}}
+                    <br/>
+                    {{version}}
+                </p>
 
                 {{#if dependencies}}
                     <br/>
@@ -72,8 +83,8 @@
                     &nbsp;
                     ZIP
                 </button></a>
-                {{#if unitypackage}}
-                    <a href="{{unitypackage}}"><button neutral>
+                {{#if unityPackage}}
+                    <a href="{{unityPackage}}"><button neutral>
                         <i class="nf nf-md-download"></i>
                         &nbsp;
                         Unity Package
