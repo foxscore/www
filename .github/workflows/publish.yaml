@@ -24,9 +24,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Restore Cache
-        uses: actions/cache
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: cache
+          key: meta-cache
 
       - name: Setup Node
         uses: actions/setup-node@v4
