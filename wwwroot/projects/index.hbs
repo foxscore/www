@@ -1,70 +1,71 @@
 {{#> layout}}
 
-    <h1 class="mb-0">Projects</h1>
-    <div class="mb-2">
-            <span text-neutral relative style="top: -0.5rem;">
-                Stuff I made
-            </span>
-    </div>
+<h1 class="mb-0">Projects</h1>
+<div class="mb-2">
+    <span text-neutral relative style="top: -0.5rem;">
+        Stuff I made
+    </span>
+</div>
 
-    <row>
+<row>
 
-        <card large>
-            <header>
-                Easy Login
-            </header>
-            <content>
-                <p>
-                    The VRChat SDK handles authentication in a weird way.
-                    The biggest issue being that you have to login for every project individually,
-                    which may log you out of older projects or even the game itself.
-                </p>
-                <p>
-                    Easy Login not only solves this issue by having you login once
-                    and keeping your credentials securely across your local projects.
-                    It also allows you to login with multiple accounts
-                    without having to re-enter your password when switching between them.
-                </p>
-            </content>
-            <footer>
-                {{#> linkButton href="/vpm/#dev.foxscore.easy-login" style="primary"}}
-                    Get Started
-                {{/linkButton}}
-                {{#> linkButton href="https://github.com/foxscore/easy-login" style="neutral"}}
-                    Source Code
-                {{/linkButton}}
-            </footer>
-        </card>
+    <card large>
+        <header>
+            Easy Login
+        </header>
+        <content>
+            <p>
+                Tired of logging into VRChat for every single project? The VRChat SDK's clunky authentication process
+                can be a real hassle. Say goodbye to constant logins and the risk of getting logged out of your favorite
+                projects or even the game itself.
+            </p>
+            <p>
+                Introducing Easy Login. This handy tool simplifies the authentication process by allowing you to log in
+                once and securely store your credentials across all your local projects. No more repetitive logins!
+                Plus, with Easy Login, you can easily switch between multiple accounts without having to re-enter your
+                password.
+            </p>
+        </content>
+        <footer>
+            {{#> linkButton href="/vpm/#dev.foxscore.easy-login" style="primary"}}
+            Get Started
+            {{/linkButton}}
+            {{#> linkButton href="https://github.com/foxscore/easy-login" style="neutral"}}
+            Source Code
+            {{/linkButton}}
+        </footer>
+    </card>
 
-        <card medium>
-            <header>foxscore.dev</header>
-            <content>
-                <p>
-                    I thought about making my own css library a while back, and recently decided to use early scraps of it to make this website.
-                </p>
+    <card medium>
+        <header>foxscore.dev</header>
+        <content>
+            <p>
+                I thought about making my own css library a while back, and recently decided to use early scraps of it
+                to make this website.
+            </p>
 
-                <table>
-                    <tr>
-                        <td>Ubuntu NerdFont</td>
-                        <td>UBUNTU FONT LICENCE Version 1.0</td>
-                    </tr>
-                    <tr>
-                        <td>PopperJS</td>
-                        <td>MIT License</td>
-                    </tr>
-                    <tr>
-                        <td>Tippy.JS</td>
-                        <td>MIT License</td>
-                    </tr>
-                </table>
-            </content>
-            <footer>
-                {{#> linkButton href="https://github.com/foxscore/www" style="neutral"}}
-                    Source Code
-                {{/linkButton}}
-            </footer>
-        </card>
+            <table>
+                <tr>
+                    <td>Ubuntu NerdFont</td>
+                    <td>UBUNTU FONT LICENCE Version 1.0</td>
+                </tr>
+                <tr>
+                    <td>PopperJS</td>
+                    <td>MIT License</td>
+                </tr>
+                <tr>
+                    <td>Tippy.JS</td>
+                    <td>MIT License</td>
+                </tr>
+            </table>
+        </content>
+        <footer>
+            {{#> linkButton href="https://github.com/foxscore/www" style="neutral"}}
+            Source Code
+            {{/linkButton}}
+        </footer>
+    </card>
 
-    </row>
+</row>
 
 {{/layout}}

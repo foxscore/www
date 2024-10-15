@@ -429,7 +429,7 @@ body main {
     gap: 0.5rem;
     width: calc(100% - (var(--main-padding) * 2));
     padding: var(--main-padding);
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 body main row {
