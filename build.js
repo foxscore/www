@@ -1,5 +1,5 @@
-import { rm, cp, rmdir, readFile, mkdir, writeFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { rm, readFile, mkdir, writeFile } from "node:fs/promises";
+import { existsSync, createWriteStream } from "node:fs";
 
 import { execSync } from 'child_process';
 import { fileURLToPath } from "url";
@@ -14,46 +14,28 @@ import { gt, prerelease } from "semver";
 import { get } from "node:https";
 import { createHash } from "node:crypto";
 
+function readJsonFile(path) {
+    return JSON.parse(fs.readFileSync(path, { encoding: 'utf-8' }));
+}
+
 const config = {
     excludePatterns: [
         '**/*.hbs',
     ],
-    sources: JSON.parse(fs.readFileSync('./sources.json', { encoding: 'utf-8' })),
+    sources: readJsonFile('./sources.json'),
 }
 
 Array.prototype.first = function (condition) {
     if (this.length === 0) return undefined;
     if (condition === undefined || condition === null) return this[0];
 
-    for (let i = 0; i < array.length; i++) {
-        if (condition(array[i])) {
-            return array[i];
+    for (let i = 0; i < this.length; i++) {
+        if (condition(this[i])) {
+            return this[i];
         }
     }
 
     return undefined;
-}
-
-async function downloadFile(url, filePath) {
-    return new Promise((resolve, reject) => {
-        const request = get(url, (response) => {
-            const fileStream = createWriteStream(filePath);
-            response.pipe(fileStream);
-
-            fileStream.on("finish", () => {
-                fileStream.close();
-                resolve(`Download of "${filePath}" completed`);
-            });
-
-            response.on("error", (error) => {
-                reject(`Error downloading file: ${error.message}`);
-            });
-        });
-
-        request.on("error", (error) => {
-            reject(`Error creating request: ${error.message}`);
-        });
-    });
 }
 
 async function updateIndex() {
@@ -125,16 +107,19 @@ async function updateIndex() {
 
             let jsonPath = 'cache/' + getHashOfPackage(release.tag_name);
             if (!existsSync(jsonPath))
-                await downloadFile(jsonUrl, jsonPath);
-            let pkg = require(jsonPath);
+                execSync(`wget -O ${jsonPath} "${jsonUrl}"`);
+            debug(fs.readFileSync(jsonPath, { encoding: 'utf-8' }));
+            let pkg = readJsonFile(jsonPath);
             pkg.url = zipUrl;
             if (unityPackageUrl !== undefined)
                 pkg.unityPackage = unityPackageUrl;
 
+            if (repository.packages[pkg.name] === undefined)
+                repository.packages[pkg.name] = {}
             repository.packages[pkg.name][pkg.version] = pkg;
         }
     }
-    await writeFile('vpm/index.json', repository);
+    await writeFile('vpm/index.json', JSON.stringify(repository));
 }
 
 async function build() {
@@ -146,8 +131,8 @@ async function build() {
     await updateIndex();
 
     info("Parsing index...");
-    const packagesOverview = [];
-    const index = require('vpm/index.json');
+    let packagesOverview = [];
+    const index = readJsonFile('vpm/index.json');
     for (let id in index.packages) {
         let latest = null;
         let latestPre = null;
