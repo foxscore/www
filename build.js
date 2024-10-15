@@ -18,7 +18,7 @@ const config = {
     excludePatterns: [
         '**/*.hbs',
     ],
-    sources: require('./sources.json'),
+    sources: JSON.parse(fs.readFileSync('./sources.json', { encoding: 'utf-8' })),
 }
 
 Array.prototype.first = function (condition) {
@@ -59,6 +59,15 @@ async function downloadFile(url, filePath) {
 async function updateIndex() {
 
     fs.mkdirSync('cache', { recursive: true });
+
+    let options = { headers: {} };
+    if (process.env.GITHUB_TOKEN !== undefined) {
+      options.headers.Authorization = `Bearer: ${process.env.GITHUB_TOKEN}`;
+    } else if (process.env.GITHUB_ACTIONS !== undefined) {
+      warning('Not authenticated! This will most likely result in a 403 from GitHub API calls.')
+    } else {
+      info('GitHub API calls will be made without authentication. You may experience 403 errors.')
+    }
 
     const filePath = 'cache/api_response.json';
     if (fs.existsSync(filePath)) {
