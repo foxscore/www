@@ -108,7 +108,6 @@ async function updateIndex() {
             let jsonPath = 'cache/' + getHashOfPackage(release.tag_name);
             if (!existsSync(jsonPath))
                 execSync(`wget -O ${jsonPath} "${jsonUrl}"`);
-            debug(fs.readFileSync(jsonPath, { encoding: 'utf-8' }));
             let pkg = readJsonFile(jsonPath);
             pkg.url = zipUrl;
             if (unityPackageUrl !== undefined)
@@ -148,9 +147,34 @@ async function build() {
             }
         }
         if (latest === null) latest = latestPre;
-        packagesOverview.push(index.packages[id][latest]);
+        let pkg = index.packages[id][latest];
+        if (pkg.dependencies !== undefined && pkg.dependencies !== null && Object.keys(pkg.dependencies).length > 0) {
+            let newDependencies = [];
+            for (let key in pkg.dependencies) {
+                newDependencies.push({
+                    name: key,
+                    range: pkg.dependencies[key]
+                });
+            }
+            pkg.dependencies = newDependencies;
+        } else {
+            pkg.dependencies = undefined;
+        }
+        if (pkg.vpmDependencies !== undefined && pkg.vpmDependencies !== null && Object.keys(pkg.vpmDependencies).length > 0) {
+            let newVpmDependencies = [];
+            for (let key in pkg.vpmDependencies) {
+                newVpmDependencies.push({
+                    name: key,
+                    range: pkg.vpmDependencies[key]
+                });
+            }
+            pkg.vpmDependencies = newVpmDependencies;
+        } else {
+            pkg.vpmDependencies = undefined;
+        }
+        packagesOverview.push(pkg);
     }
-    packagesOverview = packagesOverview.sort((a, b) => a.displayName.localeCompare(b.displayName, 'en', { sensitivity: 'base' }));
+    packagesOverview = packagesOverview.sort((a, b) => a.displayName.localeCompare(b.displayName, 'en', { sensitivity: 'base' }));  
 
     info("Copying assets...")
     function syncFiles(from, to, patterns, patternMustNotMatch) {
