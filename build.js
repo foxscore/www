@@ -114,8 +114,8 @@ async function updateIndex() {
                 pkg.unityPackage = unityPackageUrl;
 
             if (repository.packages[pkg.name] === undefined)
-                repository.packages[pkg.name] = {}
-            repository.packages[pkg.name][pkg.version] = pkg;
+                repository.packages[pkg.name] = { versions: {} }
+            repository.packages[pkg.name].versions[pkg.version] = pkg;
         }
     }
     await writeFile('vpm/index.json', JSON.stringify(repository));
@@ -135,7 +135,7 @@ async function build() {
     for (let id in index.packages) {
         let latest = null;
         let latestPre = null;
-        for (let version in index.packages[id]) {
+        for (let version in index.packages[id].versions) {
             if (prerelease(version)) {
                 if (latestPre === null || gt(version, latestPre)) {
                     latestPre = version;
@@ -147,7 +147,7 @@ async function build() {
             }
         }
         if (latest === null) latest = latestPre;
-        let pkg = index.packages[id][latest];
+        let pkg = index.packages[id].versions[latest];
         if (pkg.dependencies !== undefined && pkg.dependencies !== null && Object.keys(pkg.dependencies).length > 0) {
             let newDependencies = [];
             for (let key in pkg.dependencies) {
