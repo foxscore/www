@@ -1,5 +1,5 @@
 {
-  "watch": ["ts/*.ts", "tsconfig.json", "wwwroot/*", "build.js", "layout.hbs", "vpm/*.json"],
+  "watch": ["ts/*.ts", "tsconfig.json", "wwwroot/*", "build.js", "layout.hbs"],
   "exec": "npm run build && http-server dist -p 8080",
   "ext": "*",
   "delay": 200,

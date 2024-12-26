@@ -14,6 +14,9 @@ import { gt, prerelease } from "semver";
 import { get } from "node:https";
 import { createHash } from "node:crypto";
 
+if (!existsSync('cache')) fs.mkdirSync('cache');
+if (!existsSync('vpm')) fs.mkdirSync('vpm');
+
 function readJsonFile(path) {
     return JSON.parse(fs.readFileSync(path, { encoding: 'utf-8' }));
 }
@@ -44,20 +47,21 @@ async function updateIndex() {
 
     let options = { headers: {} };
     if (process.env.GITHUB_TOKEN !== undefined) {
-      options.headers.Authorization = `Bearer: ${process.env.GITHUB_TOKEN}`;
+        options.headers.Authorization = `Bearer: ${process.env.GITHUB_TOKEN}`;
     } else if (process.env.GITHUB_ACTIONS !== undefined) {
-      warning('Not authenticated! This will most likely result in a 403 from GitHub API calls.')
+        warning('Not authenticated! This will most likely result in a 403 from GitHub API calls.')
     } else {
-      info('GitHub API calls will be made without authentication. You may experience 403 errors.')
+        info('GitHub API calls will be made without authentication. You may experience 403 errors.')
     }
 
-    const filePath = 'cache/api_response.json';
-    if (fs.existsSync(filePath)) {
-        const stats = fs.statSync(filePath);
+    function isCacheFileOutdated(path) {
+        if (!fs.existsSync(path)) return true;
+
+        const stats = fs.statSync(path);
         const now = new Date();
         const fileTime = new Date(stats.mtime);
         const differenceInMinutes = (now.getTime() - fileTime.getTime()) / (1000 * 60);
-        if (differenceInMinutes > 30) return;
+        return differenceInMinutes > 30;
     }
 
     info('Updating releases...')
@@ -74,16 +78,22 @@ async function updateIndex() {
         }
 
         let releases = [];
-        let page = 1;
-        while (true) {
-            const response = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=100&page=${page}`, options);
-            if (!response.ok) {
-                throw new Error(`GitHub API returned status ${response.status}: ${await response.text()}`);
+        const repoCachePath = 'cache/' + createHash('md5').update(repo).digest('hex');
+        if (isCacheFileOutdated(repoCachePath)) {
+            let page = 1;
+            while (true) {
+                const response = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=100&page=${page}`, options);
+                if (!response.ok) {
+                    throw new Error(`GitHub API returned status ${response.status}: ${await response.text()}`);
+                }
+                const json = await response.json();
+                releases = releases.concat(json);
+                if (json.length != 100) break;
+                page = page + 1;
             }
-            const json = await response.json();
-            releases = releases.concat(json);
-            if (json.length != 100) break;
-            page = page + 1;
+            fs.writeFileSync(repoCachePath, JSON.stringify(releases))
+        } else {
+            releases = readJsonFile(repoCachePath)
         }
 
         if (releases.length === 0) {
@@ -174,7 +184,7 @@ async function build() {
         }
         packagesOverview.push(pkg);
     }
-    packagesOverview = packagesOverview.sort((a, b) => a.displayName.localeCompare(b.displayName, 'en', { sensitivity: 'base' }));  
+    packagesOverview = packagesOverview.sort((a, b) => a.displayName.localeCompare(b.displayName, 'en', { sensitivity: 'base' }));
 
     info("Copying assets...")
     function syncFiles(from, to, patterns, patternMustNotMatch) {
