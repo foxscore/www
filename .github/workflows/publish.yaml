@@ -23,11 +23,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Restore Cache
-        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
-        with:
-          path: cache
-          key: meta-cache
+# DISABLED CACHE
+# GitHub upgraded the way caching works.
+# This is only a quick-fix to push out a Easy Login beta.
+# 
+#       - name: Restore Cache
+#         uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
+#         with:
+#           path: cache
+#           key: meta-cache
 
       - name: Setup Node
         uses: actions/setup-node@v4
