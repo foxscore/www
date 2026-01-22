@@ -103,14 +103,14 @@ async function updateIndex() {
 
         for (let release of releases) {
             let jsonUrl = release.assets.first(a => a.name === 'package.json')?.browser_download_url;
-            let zipUrl = release.assets.first(a => a.name.endsWith('.zip'))?.browser_download_url;
+            let zipAsset = release.assets.first(a => a.name.endsWith('.zip'));
             let unityPackageUrl = release.assets.first(a => a.name.endsWith('.unitypackage'))?.browser_download_url;
 
             if (jsonUrl === undefined) {
                 setFailed(`Release ${release.tag_name} of ${repo} does not contain a package.json file`);
                 exit(1);
             }
-            if (zipUrl === undefined) {
+            if (zipAsset?.browser_download_url === undefined) {
                 setFailed(`Release ${release.tag_name} of ${repo} does not contain a zip file`);
                 exit(1);
             }
@@ -119,7 +119,18 @@ async function updateIndex() {
             if (!existsSync(jsonPath))
                 execSync(`wget -O ${jsonPath} "${jsonUrl}"`);
             let pkg = readJsonFile(jsonPath);
-            pkg.url = zipUrl;
+            pkg.url = zipAsset.browser_download_url;
+            if (zipAsset?.digest !== undefined && zipAsset?.digest !== null) {
+                let format = zipAsset.digest.split(':')[0];
+                if (format == 'sha256') {
+                    pkg.zipSHA256 = zipAsset.digest.split(':')[1];
+                }
+                else {
+                    warning(`The digest type for ${pkg.name}@${pkg.version} is ${format}`)
+                }
+            } else {
+                warning(`Package ${pkg.name}@${pkg.version} does not have a digest field`)
+            }
             if (unityPackageUrl !== undefined)
                 pkg.unityPackage = unityPackageUrl;
 
